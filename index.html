@@ -1,29 +1,86 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Movie Search App</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-<header>
-<h1>🎬 Movie Explorer</h1>
-<p>Search your favorite movies</p>
-</header>
+const API_KEY="a10e3623";
 
-<div class="search">
-<input id="searchInput" placeholder="Search movies...">
-<button onclick="searchMovies()">Search</button>
+let movie="batman";
+let page=1;
+
+
+async function searchMovies(){
+
+movie=document.getElementById("searchInput").value;
+page=1;
+load();
+
+}
+
+
+async function load(){
+
+let url=`https://www.omdbapi.com/?apikey=${API_KEY}&s=${movie}&page=${page}`;
+
+let res=await fetch(url);
+let data=await res.json();
+
+show(data.Search || []);
+
+document.getElementById("page").innerText=page;
+
+}
+
+
+function show(movies){
+
+let box=document.getElementById("movies");
+
+box.innerHTML="";
+
+
+movies.forEach(m=>{
+
+box.innerHTML += `
+
+<div class="movie">
+
+<img src="${m.Poster}">
+
+<h2>
+
+<a href="https://www.imdb.com/title/${m.imdbID}/" target="_blank">
+
+${m.Title}
+
+</a>
+
+</h2>
+
+<p>${m.Year}</p>
+
 </div>
 
-<div id="movies" class="grid"></div>
+`;
 
-<div class="pages">
-<button onclick="previousPage()">⬅ Previous</button>
-<span id="pageNumber">1</span>
-<button onclick="nextPage()">Next ➡</button>
-</div>
+});
 
-<script src="script.js"></script>
-</body>
-</html>
+}
+
+
+
+function next(){
+
+page++;
+load();
+
+}
+
+
+function prev(){
+
+if(page>1){
+page--;
+load();
+}
+
+}
+
+
+load();
