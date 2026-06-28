@@ -1,57 +1,59 @@
 
 const API_KEY="a10e3623";
 
+let movie="batman";
 let page=1;
-let query="batman";
+
 
 async function searchMovies(){
 
-query=document.getElementById("searchInput").value;
+movie=document.getElementById("searchInput").value;
 page=1;
-loadMovies();
+load();
 
 }
 
-async function loadMovies(){
 
-let url=`https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}&page=${page}`;
+async function load(){
+
+let url=`https://www.omdbapi.com/?apikey=${API_KEY}&s=${movie}&page=${page}`;
 
 let res=await fetch(url);
 let data=await res.json();
 
-display(data.Search);
+show(data.Search || []);
 
-document.getElementById("pageNumber").innerText=page;
+document.getElementById("page").innerText=page;
 
 }
 
 
-function display(movies){
+function show(movies){
 
 let box=document.getElementById("movies");
 
 box.innerHTML="";
 
-if(!movies){
-box.innerHTML="<h2>No movies found</h2>";
-return;
-}
 
-movies.forEach(movie=>{
+movies.forEach(m=>{
 
-box.innerHTML+=`
+box.innerHTML += `
 
-<div class="card">
+<div class="movie">
 
-<img src="${movie.Poster}">
+<img src="${m.Poster}">
 
-<h2>${movie.Title}</h2>
+<h2>
 
-<p>${movie.Year}</p>
+<a href="https://www.imdb.com/title/${m.imdbID}/" target="_blank">
 
-<button onclick="info('${movie.imdbID}')">
-Details
-</button>
+${m.Title}
+
+</a>
+
+</h2>
+
+<p>${m.Year}</p>
 
 </div>
 
@@ -62,39 +64,23 @@ Details
 }
 
 
-async function info(id){
 
-let res=await fetch(
-`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`
-);
+function next(){
 
-let m=await res.json();
-
-alert(
-`Title: ${m.Title}
-Year: ${m.Year}
-Rating: ${m.imdbRating}
-
-${m.Plot}`
-);
-
-}
-
-
-function nextPage(){
 page++;
-loadMovies();
+load();
+
 }
 
 
-function previousPage(){
+function prev(){
 
 if(page>1){
 page--;
-loadMovies();
+load();
 }
 
 }
 
 
-loadMovies();
+load();
