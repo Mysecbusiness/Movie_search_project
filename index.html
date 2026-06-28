@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Movie Search App</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+<h1>🎬 Movie Explorer</h1>
+<p>Search your favorite movies</p>
+</header>
+
+<div class="search">
+<input id="searchInput" placeholder="Search movies...">
+<button onclick="searchMovies()">Search</button>
+</div>
+
+<div id="movies" class="grid"></div>
+
+<div class="pages">
+<button onclick="previousPage()">⬅ Previous</button>
+<span id="pageNumber">1</span>
+<button onclick="nextPage()">Next ➡</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
